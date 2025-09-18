@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: my-cronjob
+  namespace: home-dev
+spec:
+  # Поле 'schedule' определяет, как часто запускать задачу.
+  # Формат - стандартный cron. "*/1 * * * *" означает "каждую минуту".
+  schedule: "*/1 * * * *"
+  
+  # 'jobTemplate' - это, по сути, шаблон для Job, который будет создаваться по расписанию.
+  # Вы можете просто вложить сюда ваш существующий 'spec' из Job.
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 100
+      template:
+        spec:
+          containers:
+          - name: echo
+            image: busybox
+            args:
+            - /bin/sh
+            - -c
+            - "date; echo Hello from the Kubernetes cluster!"
+          restartPolicy: OnFailure
+      backoffLimit: 4
