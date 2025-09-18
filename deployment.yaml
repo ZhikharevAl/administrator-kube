@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: http-server
+  namespace: home-dev
+spec:
+  strategy:
+    type: Recreate
+  replicas: 3
+  selector:
+    matchLabels:
+      app: go-http-server
+  template:
+    metadata:
+      labels:
+        app: go-http-server
+    spec:
+      containers:
+        - name: server
+          image: 1cylon1/http-server:0.0.2
+          ports:
+            - containerPort: 8080
+              name: web
+          resources:
+            requests:
+              memory: "64Mi" # Минимально необходимая память
+              cpu: "250m" # Минимально необходимое процессорное время (250m = 0.25 ядра)
+            limits:
+              memory: "128Mi" # Максимально разрешенная память
+              cpu: "500m" # Максимально разрешенное процессорное время (500m = 0.5 ядра)
+
