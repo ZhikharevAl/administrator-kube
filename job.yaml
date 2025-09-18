@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: myjob
+  namespace: home-dev
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      containers:
+      - name: echo
+        image: busybox
+        command: ["/bin/sh", "-c", "echo Hello from the Kubernetes cluster!"]
+      restartPolicy: Never
+  backoffLimit: 4
